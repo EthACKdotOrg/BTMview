@@ -8,7 +8,7 @@ use btmview;
 use namespace::autoclean;
 use DateTime;
 
-#bloperl->model("DB")->schema->deploy;
+btmview->model("DB")->schema->deploy;
 
 btmview->model('DB')->resultset('User')->create({
   username   => 'user',
