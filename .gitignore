@@ -1,2 +1,7 @@
 btmview.conf
 data/database.db
+Makefile
+blib
+inc/Module/Install/Can.pm
+inc/Module/Install/Fetch.pm
+inc/Module/Install/Win32.pm
