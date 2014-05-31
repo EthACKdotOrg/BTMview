@@ -42,11 +42,6 @@ return url to file with mtime
 =cut
 sub get_rel {
   my ( $self, $c, $file ) = @_;
-  my $time = 100020;
-  eval {
-    $time = stat('root/static/'.$file)->mtime;
-  };
-  return $file.'?mtime='.int($time);
   return '/static/'.$file;
 }
 ```
