@@ -32,13 +32,17 @@ sub index :Path :Args(0) {
 sub api :Local :Ags(1) {
   my ( $self, $c, $command ) = @_;
 
-  my %opts;
-  foreach (keys($c->req->params)) {
-    $opts{$_} = $c->req->params->{$_};
-  }
-  my $answer = btmview::BitMessage::query($self, $c, $command, %opts);
+  if ($c->user_exists) {
+    my %opts;
+    foreach (keys($c->req->params)) {
+      $opts{$_} = $c->req->params->{$_};
+    }
+    my $answer = btmview::BitMessage::query($self, $c, $command, %opts);
 
-  $c->stash(%{$answer});
+    $c->stash(%{$answer});
+  } else {
+    $c->stash(error => 'Sign in first');
+  }
   
   $c->component('View::JSON')->encoding('utf-8');
   $c->forward('View::JSON');
