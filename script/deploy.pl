@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use lib "/srv/perl-apps/btmview.tengu.ch/btmview/lib";
+use lib "lib";
 
 use btmview;
 use namespace::autoclean;
