@@ -1,0 +1,4 @@
+#!/bin/sh
+p=$(dirname  $0)
+d=$(pwd -P)
+${d}/${p}/btmview_create.pl model DB DBIC::Schema btmview::Schema create=static components=PassphraseColumn dbi:SQLite:data/database.db

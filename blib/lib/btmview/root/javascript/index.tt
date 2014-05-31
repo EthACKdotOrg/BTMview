@@ -1,0 +1,434 @@
+[%INCLUDE static/jquery.js %]
+[%INCLUDE static/bootstrap/js/bootstrap.min.js %]
+[%INCLUDE static/js/script.js %]
+
+[%IF c.user_exists %]
+function feedback(status, content) {
+  $('#feedback').addClass('alert-'+status);
+  $('#feedback').html(content)
+    $('#feedback').show();
+  $('#feedback').delay(5000).fadeOut('slow');
+  $('#feedback').delay(5010).removeClass('alert-'+status);
+}
+
+function refreshAddresses() {
+  $.getJSON('/btm/api/listAddresses2', {}, function(data) {
+      var myAddresses = '';
+      var chanAddresses = '';
+      selectMyAddress = '';
+      $.each(data.addresses, function(addr) {
+
+        var label;
+        try {
+        label = atob(data.addresses[addr].label);
+        } catch(e) {
+        label = data.addresses[addr].label;
+        }
+        var address = data.addresses[addr].address;
+        var chan    = data.addresses[addr].chan;
+        var active  = data.addresses[addr].enabled;
+
+        var action = 'glyphicon glyphicon-remove';
+
+        row  = '<div class="row">';
+        row += '<div class="col-sm-4">';
+        if (chan) {
+        row += '<span class="glyphicon glyphicon-remove btn-leave-chan" data="'+ address +'" title="Leave chan"></span>';
+        } else {
+        row += '<span class="glyphicon glyphicon-remove btn-remove-address" data="'+ address +'" title="Delete address"></span>';
+        }
+        row += ' '+ Utf8.decode(label) +'</div>';
+        row += '<div class="col-md-6">';
+        if (chan) {
+          row += '<span class="glyphicon glyphicon-send btn-write" data="'+ address +'" title="Write"></span> ';
+        }
+        row += address +'</div>';
+        row += '</div>';
+        if (chan) {
+          chanAddresses += row;
+        } else {
+          myAddresses += row;
+          selectMyAddress += '<option value="'+ address +'">'+ Utf8.decode(label) +' ('+ address +')</option>';
+        }
+      });
+  $('#myAddressesList').html(myAddresses);
+  $('#myChanList').html(chanAddresses);
+  $('#inputFrom').html(selectMyAddress);
+  }).done(function() {
+    $('.btn-write').click(function() {
+      var address = $(this).attr('data');
+      $('#inputTo').val(address);
+      $('#submenu a[href="#new-message"]').tab('show');
+      $('#inputMsg').focus()
+      });
+    $('.btn-remove-address').click(function() {
+      var address = $(this).attr('data');
+      $.getJSON('/btm/api/deleteAddress', {'address': address}, function(data) {
+        feedback('success', data.answer);
+        refreshAddresses();
+        });
+      });
+    $('.btn-leave-chan').click(function() {
+      var address = $(this).attr('data');
+      $.getJSON('/btm/api/leaveChan', {'address': address}, function(data) {
+        feedback('success', data.answer);
+        refreshAddresses();
+        });
+      });
+    });
+}
+
+function refreshSubscriptions() {
+  $.getJSON('/btm/api/listSubscriptions', {}, function(data) {
+      var row = '';
+      $.each(data.subscriptions, function(addr) {
+        var subs = data.subscriptions[addr];
+        var label = atob(subs.label);
+        var address = subs.address;
+
+        row += '<div class="row">';
+        row += '<div class="col-md-4">';
+        row += '<span class="glyphicon glyphicon-remove btn-unsubscribe" title="Unsubscribe" data="'+address+'"></span>';
+        row += ' '+ Utf8.decode(label) +'</div>';
+        row += '<div class="col-md-6">'+address+'</div>';
+        row += '</div>';
+        });
+      $('#currentSubscriptions').html(row);
+      }).done(function() {
+        $('.btn-unsubscribe').click(function() {
+          var address = $(this).attr('data');
+          $.getJSON('/btm/api/deleteSubscription', {'address': address}, function(data) {
+            feedback('success', data.answer);
+            refreshSubscriptions();
+            });
+          });
+        });
+}
+
+function refreshAddressBook() {
+  $.getJSON('/btm/api/listAddressBookEntries', {}, function(data) {
+      var row = '';
+      $.each(data.addresses, function(addr) {
+        var label;
+        try {
+        label = atob(data.addresses[addr].label);
+        } catch(e) {
+        label = data.addresses[addr].label;
+        }
+        var address = data.addresses[addr].address;
+
+        row += '<div class="row">';
+        row += '<div class="col-md-4">';
+        row += '<span class="glyphicon glyphicon-remove btn-remove-contact" title="Remove" data="'+address+'"></span>';
+        row += ' '+ Utf8.decode(label) +'</div>';
+        row += '<div class="col-md-6">';
+        row += '<span class="glyphicon glyphicon-send btn-write" data="'+ address +'" title="Write"></span> ';
+        row += address +'</div>';
+        row += '</div>';
+        });
+      $('#contactAddressesList').html(row);
+  }).done(function() {
+    $('.btn-write').click(function() {
+      var address = $(this).attr('data');
+      $('#inputTo').val(address);
+      $('#submenu a[href="#new-message"]').tab('show');
+      $('#inputMsg').focus()
+      });
+    $('.btn-remove-contact').click(function() {
+      var address = $(this).attr('data');
+      $.getJSON('/btm/api/deleteAddressBookEntry', {'address': address}, function(data) {
+        feedback('success', data.answer);
+        refreshAddressBook();
+        });
+      });
+    });
+}
+
+function refreshInbox() {
+  $.getJSON('/btm/api/getAllInboxMessages', {}, function(data) {
+      var msgList = '';
+      var unreadList = '';
+      var newMsgCount = 0;
+      data.inboxMessages.reverse();
+      $.each(data.inboxMessages, function(msg) {
+        var imsg = data.inboxMessages[msg];
+
+        var read = imsg.read;
+        var is_read = 'star';
+        if (read == 1) {
+        is_read = 'star-empty';
+        }
+
+        var subject = atob(imsg.subject);
+        var from = imsg.fromAddress;
+        var tmpList = ''
+
+        tmpList += '<div class="row msg-click" id="'+ imsg.msgid +'">';
+        tmpList += '<div class="col-md-5">';
+        tmpList += '<span class="glyphicon glyphicon-'+is_read+'"></span>';
+        tmpList += '<span class="glyphicon glyphicon-remove btn-delete-message" data-value="'+ imsg.msgid +'"></span>';
+        tmpList += ' '+ Utf8.decode(subject) +'</div>';
+        tmpList += '<div class="col-md-4">'+ timestamp2dateTime(imsg.receivedTime) +'</div>';
+        tmpList += '<div class="col-md-3">'+from+'</div>';
+        tmpList += '</div>';
+
+        if (read == 1) {
+          msgList += tmpList;
+        } else {
+          unreadList += tmpList;
+          newMsgCount +=1;
+        }
+      });
+      $('#Inbox').html(unreadList + msgList);
+      $('#newMsgCount').text(newMsgCount);
+  }).done(function() {
+    $('.msg-click').mouseenter( function(){ $(this).addClass('bg-info'); } ).mouseleave( function() { $(this).removeClass('bg-info'); } );
+
+    $('.btn-delete-message').click(function() {
+      var msgid = $(this).attr('data-value');
+      $.getJSON('/btm/api/trashMessage', {'msgid':msgid}, function(data) {
+        $('#'+msgid).hide();
+        $('#msgHeader').html();
+        $('#msgContent').html();
+        });
+      });
+
+    $('.msg-click').click(function() {
+      $.getJSON('/btm/api/getInboxMessageByID', {'msgid': $(this).prop('id'), 'readBit': 1}, function(data) {
+        var msg = data.inboxMessage[0];
+
+        var header  = '<b>Subject:</b> <span id="subject">'+ Utf8.decode(atob(msg.subject)) +'</span><br>';
+        header += '<b>From:</b> '+ msg.fromAddress;
+        header += ' <span class="glyphicon glyphicon-user btn-add-contact" data="'+ msg.fromAddress +'" title="Add contact"></span>';
+        header += ' <span class="glyphicon glyphicon-share-alt btn-new-msg" data="'+ msg.fromAddress +'" title="Reply"></span><br>';
+        header += '<b>To:</b> <span id="toAddress">'+ msg.toAddress +'</span><br>';
+        header += '<b>Received on:</b> '+ timestamp2dateTime(msg.receivedTime);
+
+        $('#msgHeader').html(header);
+        $('#msgContent').html(nl2br(Utf8.decode(atob(msg.message))));
+        }).done(function() {
+          $('.btn-new-msg').click(function() {
+            var to_address = $(this).prop('id');
+            var message = br2nl($('#msgContent').html());
+            var subject = $('#subject').text();
+            var fromAddress = $('#toAddress').text();
+
+            $('#inputTo').val(to_address);
+            $('#inputFrom').val(fromAddress);
+            $('#inputSubject').val('Re: '+subject);
+            $('#inputMsg').val("\n\n------------------------------------------------------\n"+message);
+            $('#submenu a[href="#new-message"]').tab('show');
+            $('#inputMsg').focus()
+            });
+          $('.btn-add-contact').click(function() {
+            var contact = $(this).attr('data');
+
+            $('#inputContactId').val(contact);
+            $('#submenu a[href="#addresses"]').tab('show');
+            });
+          });
+    });
+  });
+  setTimeout(refreshInbox, 60000);
+}
+
+function refreshOutbox() {
+  $.getJSON('/btm/api/getAllSentMessages', {}, function(data) {
+      var msgList = '';
+      data.sentMessages.reverse();
+      $.each(data.sentMessages, function(msg) {
+        var imsg = data.sentMessages[msg];
+
+        var subject = atob(imsg.subject);
+        var to = imsg.toAddress;
+
+        var status_img = imgStatus(imsg.status);
+
+        msgList += '<div class="row msg-click-outbox" id="'+imsg.msgid+'">';
+        msgList += '<div class="col-md-4">'+ Utf8.decode(subject) +'</div>';
+        msgList += '<div class="col-md-4">'+ timestamp2dateTime(imsg.lastActionTime) +'</div>';
+        msgList += '<div class="col-md-3">'+ to +'…</div>';
+        msgList += '<div class="col-md-1"><span class="glyphicon glyphicon-'+ status_img +'" title="'+ imsg.status +'"></span></div>';
+        msgList += '</div>';
+        });
+      $('#Outbox').html(msgList);
+      }).done(function() {
+        $('.msg-click-outbox').mouseenter( function(){ $(this).addClass('bg-info'); } ).mouseleave( function() { $(this).removeClass('bg-info'); } );
+
+        $('.msg-click-outbox').click(function() {
+          $.getJSON('/btm/api/getSentMessageByID', {'msgid': $(this).prop('id')}, function(data) {
+            var msg = data.sentMessage[0];
+            var status_img = imgStatus(msg.status);
+
+            var header  = '<b>Subject:</b> '+ Utf8.decode(atob(msg.subject)) +'<br>';
+            header += '<b>From:</b> '+ msg.fromAddress +'<br>';
+            header += '<b>To:</b> '+msg.toAddress;
+            header += ' <span class="glyphicon glyphicon-user btn-add-contact" data="'+ msg.toAddress +'" title="Add contact"></span><br>';
+            header += '<b>Sent on:</b> '+ timestamp2dateTime(msg.lastActionTime) +' <span class="glyphicon glyphicon-'+ status_img +'" title="'+ msg.status +'"></span>';
+
+            $('#msgHeader').html(header);
+            $('#msgContent').html(nl2br(Utf8.decode(atob(msg.message))));
+
+            $('.btn-add-contact').click(function() {
+              var contact = $(this).attr('data');
+
+              $('#inputContactId').val(contact);
+              $('#submenu a[href="#addresses"]').tab('show');
+              });
+            });
+        });
+  });
+  setTimeout(refreshOutbox, 60000);
+}
+
+$('#formNewMessage').submit(function(event) {
+    event.preventDefault();
+    action = $('#formNewMessage').prop('action');
+
+    opts = {
+    "toAddress":    Utf8.encode($('#inputTo').val()),
+    "fromAddress":  Utf8.encode($('#inputFrom').val()),
+    "subject":      Utf8.encode($('#inputSubject').val()),
+    "encodingType": Utf8.encode($('#inputEncodingType').val()),
+    "message":      Utf8.encode($('#inputMsg').val()),
+    };
+
+    $.post(action, opts, function(data) {
+      if (data.answer) {
+      feedback('success', data.answer);
+      } else {
+      feedback('danger', 'An error occured, please try again later');
+      }
+      setTimeout(refreshInbox, 100);
+      setTimeout(refreshOutbox, 1000);
+
+      $('#inputTo').val('');
+      $('#inputFrom').val('');
+      $('#inputSubject').val('');
+      $('#intputEncodingType').val('');
+      $('#inputMsg').val('');
+
+      });
+});
+$('#formNewContact').submit(function(event) {
+    event.preventDefault();
+    action = $(this).prop('action');
+    opts = {
+    'address': Utf8.encode($('#inputContactId').val()),
+    'label': Utf8.encode($('#inputContactLabel').val())
+    };
+    $.getJSON(action, opts, function(data) {
+      feedback('success', data.answer);
+      $('#inputContactId').val('');
+      $('#inputContactLabel').val('');
+      refreshAddressBook();
+      });
+    });
+$('#formSubscribe').submit(function(event) {
+    event.preventDefault();
+    action = $(this).prop('action');
+    opts = {
+    'address': $('#inputSubscribeAddress').val(),
+    'label':   $('#inputSubscribeLabel').val()
+    };
+    $.getJSON(action, opts, function(data) {
+      feedback('success', data.answer);
+      $('#inputSubscribeAddress').val('');
+      $('#inputSubscribeLabel').val('');
+      refreshSubscriptions();
+      });
+    });
+$('#formJoinChan').submit(function(event) {
+    event.preventDefault();
+    action = $(this).prop('action');
+    opts = {
+    'address':    $('#inputJoinChanAddress').val(),
+    'passphrase': $('#inputJoinChanPassphrase').val()
+    };
+    $.getJSON(action, opts, function(data) {
+      feedback('success', data.answer);
+      $('#inputJoinChanAddress').val('');
+      $('#inputJoinChanPassphrase').val('');
+      refreshAddresses();
+      });
+    });
+function displayNewAddrForm(addressType) {
+  $('.deterministic-only').hide();
+  $('.random-only').hide();
+  $('.chan-only').hide();
+
+  if (addressType == 'random') {
+    $('.random-only').show();
+  } else if(addressType == 'deterministic'){
+    $('.deterministic-only').show();
+  } else if(addressType == 'chan') {
+    $('.chan-only').show();
+  }
+}
+$('.inputAddressType').change(function() {
+    addressType = $(this).val();
+    displayNewAddrForm(addressType);
+    });
+$('#formNewAddress').submit(function(event) {
+    event.preventDefault();
+    addressType = $('.inputAddressType:checked').val();
+    var opts = {
+    'eighteenByteRipe':       $('#inputAddressShorten').is(':checked'),
+    'totalDifficulty':        $('#inputNewAddressTotalDifficulty').val(),
+    'smallMessageDifficulty': $('#inputNewAddressSmallMessageDifficulty').val(),
+    };
+    var action = '/btm/api/';
+    if (addressType == 'random') {
+    opts['label'] = $('#inputNewAddressLabel').val();
+    action += 'createRandomAddress';
+    } else if (addressType == 'deterministic') {
+    opts['passphrase']           = $('#inputNewAddressPassphrase').val();
+    opts['numberOfAddresses']    = $('#inputNewAddressNumber').val();
+    opts['addressVersionNumber'] = $('#inputNewAddressAddressVersionNumber').val();
+    opts['streamNumber']         = $('#inputNewAddressStreamNumber').val();
+    action += 'createDeterministicAddresses';
+    } else if (addressType == 'chan') {
+    opts = {'passphrase': $('#inputNewAddressPassphrase').val()};
+    action += 'createChan';
+    }
+
+    $.post(action, opts, function(data) {
+        if (addressType == 'random' || addressType == 'chan') {
+        feedback('success', data.answer);
+        } else if(addressType == 'deterministic') {
+        var output = '<ul class="list-unstyled">';
+        $.each(data.addresses, function(addr) {
+          output += '<li>'+ data.addresses[addr] +'</li>';
+          });
+        output += '</ul>';
+        feedback('success', output);
+        }
+        $('#inputNewAddressPassphrase').val('');
+        $('#inputNewAddressNumber').val('1');
+        refreshAddresses();
+        });
+});
+$(document).ready(function() {
+  addressType = $('.inputAddressType:checked').val();
+  displayNewAddrForm(addressType);
+
+  refreshInbox();
+  refreshOutbox();
+  refreshAddressBook();
+  refreshAddresses();
+  refreshSubscriptions();
+
+});
+
+[%END%]
+
+$('#submenu a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+    });
+$('#boxmenu a').click(function (e) {
+    e.preventDefault();
+    $('#msgContent').html('');
+    $('#msgHeader').html('');
+    $(this).tab('show');
+    });

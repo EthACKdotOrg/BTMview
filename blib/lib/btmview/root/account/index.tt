@@ -1,0 +1,30 @@
+[%INCLUDE common/header.tt %]
+<div class="container">
+  <ul class="nav nav-tabs" id="submenu">
+    <li class="active"><a href="#messages">Messages <span class="badge" id="newMsgCount"></span></a></li>
+    <li><a href="#new-message">Compose</a></li>
+    <li><a href="#addresses">Address book</a></li>
+    <li><a href="#chans">Chans and Subscriptions</a></li>
+    <li><a href="#profile">Profile</a></li>
+  </ul>
+
+  <div id="feedback" class="alert"></div>
+  <div class="tab-content">
+    <div class="tab-pane active" id="messages">
+    [%INCLUDE messages/inbox.tt %]
+    </div>
+    <div class="tab-pane" id="new-message">
+    [%INCLUDE messages/write.tt %]
+    </div>
+    <div class="tab-pane" id="addresses">
+    [%INCLUDE account/addresses.tt %]
+    </div>
+    <div class="tab-pane" id="chans">
+    [%INCLUDE account/chans.tt %]
+    </div>
+    <div class="tab-pane" id="profile">
+    [%INCLUDE account/profile.tt %]
+    </div>
+  </div>
+</div>
+[%INCLUDE common/footer.tt %]

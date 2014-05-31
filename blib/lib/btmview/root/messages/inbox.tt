@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-md-10">
+    <ul class="nav nav-pills" id="boxmenu">
+      <li class="active"><a href="#messages-inbox">Inbox</a></li>
+      <li><a href="#messages-outbox">Outbox</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="messages-inbox">
+        <div class="row">
+          <h4>Inbox</h4>
+          <div id="Inbox"></div>
+        </div>
+      </div>
+      <div class="tab-pane" id="messages-outbox">
+        <div class="row">
+          <h4>Outbox</h4>
+          <div id="Outbox"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <hr>
+      <div id="msgHeader" class="alert-info"></div>
+      <div id="msgContent"></div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,65 @@
+#!/bin/sh
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          btmview.tengu.ch
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Starts btmview.tengu.ch
+# Description:       nothing more to say
+### END INIT INFO
+
+export PERL_LOCAL_LIB_ROOT="/srv/perl-apps/perl-libs/";
+export PERL_MB_OPT="--install_base ${PERL_LOCAL_LIB_ROOT}";
+export PERL_MM_OPT="INSTALL_BASE=${PERL_LOCAL_LIB_ROOT}";
+export PERL5LIB="${PERL_LOCAL_LIB_ROOT}/lib/perl5/x86_64-linux-thread-multi:${PERL_LOCAL_LIB_ROOT}/lib/perl5";
+export PATH="${PERL_LOCAL_LIB_ROOT}/bin:$PATH";
+
+base="/srv/perl-apps/btmview.tengu.ch/btmview";
+pidfile="/var/run/fcgi/btmview.tengu.ch.pid";
+nproc=3;
+name='btmview.tengu.ch'
+socket=':9010'
+
+usage() {
+  echo "Usage: $(basename $0) start|stop|restart|status";
+  exit 1;
+}
+
+
+if [ -z $1 ]; then
+  usage
+fi;
+
+cd $base;
+
+case $1 in
+  start)
+    echo "Starting ${name}"
+    su -s /bin/sh -c "${base}/script/btmview_fastcgi.pl -n $nproc -l $socket -d -p $pidfile --proc_title $name" fcgi
+    ;;
+  stop)
+    echo "Killing ${name}"
+    kill $(cat $pidfile);
+    ;;
+  restart)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  status)
+    if [ -f $pidfile ]; then
+      echo "$name seems to be running"
+      exit 0
+    else
+      echo "$name does not seem to be running"
+      exit 1
+    fi
+    ;;
+  *)
+    usage
+    ;;
+esac
+exit 0

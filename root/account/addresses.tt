@@ -1,0 +1,103 @@
+<h4>My addresses</h4>
+<div class="row">
+  <div class="col-sm-offset-1 col-md-3"><strong>Label</strong></div>
+  <div class="col-md-6"><strong>Address</strong></div>
+</div>
+<div id="myAddressesList">
+</div>
+
+<h4>Create a new address</h4>
+<form class="form-horizontal" role="form" method="post" id="formNewAddress">
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="radio">
+        <label>
+          <input class="inputAddressType" name="inputAddressType" type="radio" value="random" checked="checked"> Random address
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input class="inputAddressType" name="inputAddressType" type="radio" value="deterministic"> Deterministic address
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input class="inputAddressType" name="inputAddressType" type="radio" value="chan"> Chan address
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group random-only">
+    <label for="inputNewAddressLabel" class="col-sm-2 control-label">Label</label>
+    <div class="col-sm-10">
+      <input name="label" type="text" class="form-control" id="inputNewAddressLabel" placeholder="Address label">
+    </div>
+  </div>
+
+  <div class="form-group deterministic-only chan-only">
+    <label for="inputNewAddressPassphrase" class="col-sm-2 control-label">Passphrase</label>
+    <div class="col-sm-10">
+      <input name="passphrase" type="password" class="form-control" id="inputNewAddressPassphrase" placeholder="New address passphrase">
+    </div>
+  </div>
+
+  <div class="form-group deterministic-only">
+    <label for="inputNewAddressNumber" class="col-sm-2 control-label">Amount of new deterministic addresses</label>
+    <div class="col-sm-10">
+      <input name="numberOfAddresses" type="number" min="1" class="form-control" id="inputNewAddressNumber" value="1">
+    </div>
+  </div>
+
+  <div class="form-group random-only deterministic-only">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label>
+          <input name="eighteenByteRipe" id="inputAddressShorten" type="checkbox" value="1"> Shorten address (takes longer)
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <input name="totalDifficulty"        type="hidden" id="inputNewAddressTotalDifficulty"        value="1">
+  <input name="smallMessageDifficulty" type="hidden" id="inputNewAddressSmallMessageDifficulty" value="1">
+  <input name="addressVersionNumber"   type="hidden" id="inputNewAddressAddressVersionNumber"   value="0">
+  <input name="streamNumber"           type="hidden" id="inputNewAddressStreamNumber"           value="0">
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Create</button>
+    </div>
+  </div>
+</form>
+
+<h4>My contacts</h4>
+<div class="row">
+  <div class="col-md-offset-1 col-md-3"><strong>Label</strong></div>
+  <div class="col-md-6"><strong>Address</strong></div>
+</div>
+<div id="contactAddressesList">
+</div>
+
+
+<h4>New contact</h4>
+<form class="form-horizontal" role="form" method="post" action="/btm/api/addAddressBookEntry" id="formNewContact">
+  <div class="form-group">
+    <label for="inputContactId" class="col-sm-2 control-label">Address</label>
+    <div class="col-sm-10">
+      <input name="address" type="text" class="form-control" id="inputContactId" placeholder="BM-">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputContactLabel" class="col-sm-2 control-label">Label</label>
+    <div class="col-sm-10">
+      <input name="label" type="text" class="form-control" id="inputContactLabel" placeholder="Contact Label">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Add new contact</button>
+    </div>
+  </div>
+</form>

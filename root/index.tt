@@ -1,0 +1,59 @@
+[%INCLUDE common/header.tt %]
+
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Free your communications</h1>
+      <p>
+        BitMessage is a free, decentralized way to send messages to your contacts.<br>
+        BTMview provides an easy way to access to your messages when you run your BTM instance
+        on a remote server, without any graphical interface.<br>
+        It relies on the <a href="https://bitmessage.org/wiki/API_Reference">BTM API</a> interface,
+        so please read the doc on how to
+        <a href="https://bitmessage.org/wiki/API_Reference#Enable_the_API">activate the API</a>
+        as a first step :).
+      </p>
+      <p>
+        <a href="/about/btmview" class="btn btn-success btn-lg" role="button">Learn more &raquo;</a>
+        <a href="https://bitmessage.org/" class="btn btn-primary btn-lg" role="button">BitMessage?</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Get the sources</h2>
+        <p>
+          Do you want to get this application on your own server?
+          <pre>
+git clone https://github.com/… (coming soon)
+… configure
+          </pre>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <h2>Sign in</h2>
+        <form class="form-horizontal" method="post" action="/authentication/login" role="form">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="inputUsername">Username</label>
+            <div class="col-sm-10">
+              <input name="username" type="text" class="form-control" id="inputUsername" placeholder="Username">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="inputPassword">Password</label>
+            <div class="col-sm-10">
+              <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+[%INCLUDE common/footer.tt %]

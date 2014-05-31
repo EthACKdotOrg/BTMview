@@ -1,0 +1,42 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+footer {
+  text-align: center;
+  padding-top:10px;
+  margin-top: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+#Inbox {
+  max-height:300px;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.btn-new-msg,
+.msg-click,
+.msg-click-outbox,
+.btn-write,
+.btn-add-contact,
+.btn-remove-contact,
+.btn-remove-address,
+.btn-leave-chan,
+.btn-unsubscribe,
+.btn-delete-message {
+  cursor:pointer;
+}
+.msg-click > div, .msg-click-outbox > div {
+  overflow:hidden;
+}
+#msgContent {
+  border:1px solid #c0c0c0;
+  height:300px;;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
