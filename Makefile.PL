@@ -14,6 +14,7 @@ requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::Plugin::Session::State::Cookie';
+requires 'Catalyst::Authentication::Realm::SimpleDB';
 requires 'Catalyst::View::XML::Simple';
 requires 'Moose';
 requires 'namespace::autoclean';
