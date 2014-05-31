@@ -14,10 +14,13 @@ in order to report any problem.
 
 It requires the following system perl modules:
 
+* build-essential
 * libcpanplus-perl
 * libmodule-install-perl
 * libcatalyst-perl
 * libcatalyst-devel-perl
+
+(package names come from Debian, it may differ on other Linux flavours)
 
 ### Deploy steps
 ```
