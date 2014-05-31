@@ -16,6 +16,8 @@ requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Authentication::Realm::SimpleDB';
 requires 'Catalyst::View::XML::Simple';
+requires 'Catalyst::View::TT';
+requires 'Catalyst::View::JSON';
 requires 'Moose';
 requires 'namespace::autoclean';
 requires 'Config::General'; # This should reflect the config file format you've chosen
@@ -23,6 +25,7 @@ requires 'Config::General'; # This should reflect the config file format you've 
 requires 'RPC::XML';
 requires 'Scalar::Util';
 requires 'MIME::Base64';
+requires 'DBIx::Class::PassphraseColumn';
 test_requires 'Test::More' => '0.88';
 catalyst;
 
