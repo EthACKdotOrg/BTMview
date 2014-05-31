@@ -1,3 +1,4 @@
+*.swp
 btmview.conf
 data/database.db
 Makefile
