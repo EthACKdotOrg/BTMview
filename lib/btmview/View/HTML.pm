@@ -32,7 +32,6 @@ sub get_rel {
   eval {
     $time = stat('root/static/'.$file)->mtime;
   };
-  #return $file.'?mtime='.int($time);
   return '/static/'.int($time).$file;
 }
 
