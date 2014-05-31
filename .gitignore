@@ -5,3 +5,6 @@ blib
 inc/Module/Install/Can.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/Win32.pm
+META.yml
+MYMETA.json
+MYMETA.yml
