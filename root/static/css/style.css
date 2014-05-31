@@ -14,6 +14,7 @@ footer {
   cursor: pointer;
 }
 
+#Outbox,
 #Inbox {
   max-height:300px;
   overflow-x:hidden;
