@@ -26,6 +26,7 @@ requires 'DateTime';
 requires 'RPC::XML';
 requires 'Scalar::Util';
 requires 'MIME::Base64';
+requires 'Data::Password::Entropy';
 requires 'DBIx::Class::PassphraseColumn';
 test_requires 'Test::More' => '0.88';
 catalyst;
