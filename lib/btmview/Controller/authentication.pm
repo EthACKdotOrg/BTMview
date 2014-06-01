@@ -35,6 +35,7 @@ sub login :Local :Args(0) {
 
   if ($username && $password ) {
     if ($c->authenticate({ username => $username, password => $password })) {
+      $c->session->{'user'} = $username;
       $c->response->redirect('/account');
     } else {
       $c->response->body('Hmm nope.');
