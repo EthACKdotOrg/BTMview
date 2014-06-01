@@ -1,33 +1,35 @@
-<h4>Compose</h4>
-<form id="formNewMessage" class="form-horizontal" role="form" method="post" action="/btm/api/sendMessage">
-  <div class="form-group">
-    <label for="inputTo" class="col-sm-2 control-label">To</label>
-    <div class="col-sm-10">
-      <input name="toAddress" type="text" class="form-control" id="inputTo" placeholder="BM-">
+<fieldset>
+  <legend>Compose</legend>
+  <form id="formNewMessage" class="form-horizontal" role="form" method="post" action="/btm/api/sendMessage">
+    <div class="form-group">
+      <label for="inputTo" class="col-sm-2 control-label">To</label>
+      <div class="col-sm-10">
+        <input name="toAddress" type="text" class="form-control" id="inputTo" placeholder="BM-">
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="inputFrom" class="col-sm-2 control-label">From</label>
-    <div class="col-sm-10">
-      <select name="fromAddress" class="form-control" id="inputFrom"></select>
+    <div class="form-group">
+      <label for="inputFrom" class="col-sm-2 control-label">From</label>
+      <div class="col-sm-10">
+        <select name="fromAddress" class="form-control" id="inputFrom"></select>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="inputSubject" class="col-sm-2 control-label">Subject</label>
-    <div class="col-sm-10">
-      <input name="subject" type="text" class="form-control" id="inputSubject" placeholder="Subject">
+    <div class="form-group">
+      <label for="inputSubject" class="col-sm-2 control-label">Subject</label>
+      <div class="col-sm-10">
+        <input name="subject" type="text" class="form-control" id="inputSubject" placeholder="Subject">
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="inputMsg" class="col-sm-2 control-label">Message</label>
-    <div class="col-sm-10">
-      <input type="hidden" id="inputEncodingType" name="encodingType" value="2">
-      <textarea name="message" rows="10" class="form-control" id="inputMsg"></textarea>
+    <div class="form-group">
+      <label for="inputMsg" class="col-sm-2 control-label">Message</label>
+      <div class="col-sm-10">
+        <input type="hidden" id="inputEncodingType" name="encodingType" value="2">
+        <textarea name="message" rows="10" class="form-control" id="inputMsg"></textarea>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Send</button>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">Send</button>
+      </div>
     </div>
-  </div>
-</form>
+  </form>
+</fieldset>
