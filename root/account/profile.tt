@@ -1,1 +1,28 @@
-Profile
+<fieldset>
+  <legend>Change password</legend>
+  <form action="/account/update/password" method="post" role="form" class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="inputCurrentPassword">Current password</label>
+      <div class="col-sm-10">
+        <input name="currentPassword" type="password" class="form-control" id="inputCurrentPassword" placeholder="Current password" autofocus>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="inputNewPassword">New password</label>
+      <div class="col-sm-10">
+        <input name="newPassword" type="password" class="form-control" id="inputNewPassword" placeholder="New password">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="inputNewPassword">Confirm password</label>
+      <div class="col-sm-10">
+        <input name="confirmPassword" type="password" class="form-control" id="inputConfirmPassword" placeholder="Confirm password">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Update</button>
+      </div>
+    </div>
+  </form>
+</fieldset>
