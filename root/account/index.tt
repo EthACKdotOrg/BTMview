@@ -9,6 +9,11 @@
   </ul>
 
   <div id="feedback" class="alert"></div>
+  [%IF c.success_txt %]
+    <div id="feedback-success" class="alert alert-success">[% c.success_txt %]</div>
+  [%ELSIF c.error_txt %]
+    <div id="feedback-danger" class="alert alert-danger">[% c.error_txt %]</div>
+  [%END%]
   <div class="tab-content">
     <div class="tab-pane active" id="messages">
     [%INCLUDE messages/inbox.tt %]
