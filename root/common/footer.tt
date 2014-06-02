@@ -1,5 +1,5 @@
     <footer>
-      <p>Provided by EthACK</p>
+      <p>Provided by <a href="https://www.ethack.org/">EthACK</a> &bull; <a href="https://github.com/EthACKdotOrg/BTMview">Get the source!</a></p>
     </footer>
     <script type="text/javascript" src="/javascript"></script>
   </body>
