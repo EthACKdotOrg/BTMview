@@ -164,11 +164,12 @@ function refreshInbox() {
         var from = imsg.fromAddress;
         var tmpList = ''
 
-        tmpList += '<div class="row msg-click" id="'+ imsg.msgid +'">';
+        tmpList += '<div class="row" id="row-'+ imsg.msgid +'">';
         tmpList += '<div class="col-md-5">';
+        tmpList += '<input type="checkbox" name="to_del" value="'+ imsg.msgid +'">';
         tmpList += '<span class="glyphicon glyphicon-'+is_read+'"></span>';
         tmpList += '<span class="glyphicon glyphicon-remove btn-delete-message" data-value="'+ imsg.msgid +'"></span>';
-        tmpList += ' '+ Utf8.decode(subject) +'</div>';
+        tmpList += ' <span class="msg-click" id="'+ imsg.msgid+'">'+ Utf8.decode(subject) +'</span></div>';
         tmpList += '<div class="col-md-4">'+ timestamp2dateTime(imsg.receivedTime) +'</div>';
         tmpList += '<div class="col-md-3">'+from+'</div>';
         tmpList += '</div>';
@@ -190,11 +191,22 @@ function refreshInbox() {
     $('.btn-delete-message').click(function() {
       var msgid = $(this).attr('data-value');
       $.getJSON('/btm/api/trashMessage', {'msgid':msgid}, function(data) {
-        $('#'+msgid).hide();
+        $('#row-'+msgid).hide();
         $('#msgHeader').html();
         $('#msgContent').html();
         });
       });
+
+    $('#btn-delete-selected').click(function() {
+      $.each($('input[name="to_del"]:checked'), function() {
+        var msgid = $(this).val();
+        $.getJSON('/btm/api/trashMessage', {'msgid':msgid}, function(data) {
+          $('#row-'+msgid).hide();
+          $('#msgHeader').html();
+          $('#msgContent').html();
+        });
+      });
+    });
 
     $('.msg-click').click(function() {
       $.getJSON('/btm/api/getInboxMessageByID', {'msgid': $(this).prop('id'), 'readBit': 1}, function(data) {

@@ -7,7 +7,7 @@
     <div class="tab-content">
       <div class="tab-pane active" id="messages-inbox">
         <div class="row">
-          <h4>Inbox</h4>
+          <h4>Inbox <small><span class="glyphicon glyphicon-trash" id="btn-delete-selected"></span></small></h4>
           <div id="Inbox"></div>
         </div>
       </div>
