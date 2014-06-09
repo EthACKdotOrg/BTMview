@@ -168,7 +168,7 @@ function refreshInbox() {
         tmpList += '<div class="col-md-5">';
         tmpList += '<input type="checkbox" name="to_del" value="'+ imsg.msgid +'">';
         tmpList += '<span class="glyphicon glyphicon-'+is_read+'"></span>';
-        tmpList += '<span class="glyphicon glyphicon-remove btn-delete-message" data-value="'+ imsg.msgid +'"></span>';
+        tmpList += '<span class="glyphicon glyphicon-trash btn-delete-message" data-value="'+ imsg.msgid +'"></span>';
         tmpList += ' <span class="msg-click" id="'+ imsg.msgid+'">'+ Utf8.decode(subject) +'</span></div>';
         tmpList += '<div class="col-md-4">'+ timestamp2dateTime(imsg.receivedTime) +'</div>';
         tmpList += '<div class="col-md-3">'+from+'</div>';
@@ -212,7 +212,8 @@ function refreshInbox() {
       $.getJSON('/btm/api/getInboxMessageByID', {'msgid': $(this).prop('id'), 'readBit': 1}, function(data) {
         var msg = data.inboxMessage[0];
 
-        var header  = '<b>Subject:</b> <span id="subject">'+ Utf8.decode(atob(msg.subject)) +'</span><br>';
+        var header  = '<b>Subject:</b> <span id="subject">'+ Utf8.decode(atob(msg.subject)) +'</span>';
+        header += ' <span class="glyphicon glyphicon-trash btn-delete-message" data-value="'+ msg.msgid +'"></span><br>'
         header += '<b>From:</b> '+ msg.fromAddress;
         header += ' <span class="glyphicon glyphicon-user btn-add-contact" data="'+ msg.fromAddress +'" title="Add contact"></span>';
         header += ' <span class="glyphicon glyphicon-share-alt btn-new-msg" data="'+ msg.fromAddress +'" title="Reply"></span><br>';
